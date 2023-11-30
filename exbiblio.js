@@ -1,90 +1,137 @@
-class EntidadeBibliografica {
+const generoLivro = {
+    FICCAO_CIENTIFICA : "Ficcao_cientifica.",
+    TERROR : "Terror.",
+    COMEDIA : "Comedia.",
+    SUSPENSE : "Suspense.",
+    DRAMA : "Drama.",
+    HISTORIA : "Historia.",
+    POLICIAL : "Policial."
+}
+
+class Usuario{
+    constructor(nome, registroAcademico, DataNascimento){
+        this.nome = nome;
+        this.registroAcademico = registroAcademico;
+        this.DataNascimento = DataNascimento;
+    }
+}
+
+class Biblioteca {
     constructor(){
         this.acervo = [];
         this.usuarios = [];
     }
-    
-    carregarAcervo(acervo){
-        
+
+    popularAcervo(acervo){
+        acervo.forEach(item=>{
+            if(item.EntidadeBibliografica === "livro"){
+                this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.genero, item.isEmprestado, item.usuarioEmprestimo));
+            }else{
+                this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.edicao, item.isEmprestado, item.usuarioEmprestimo));
+            }
+        });
     }
 
-    cadastrarLivro(livro) {
-        this.acervo.push(livro);
+    adicionarItem(item){
+        this.acervo.push(item);
+        console.log("Item adicionado com succeso.");
     }
 
-    emprestar(codigo, usuario) {
-        const livro = this.acervo.find(livro => livro.codigo === codigo);
-
-        if(!livro) {
-            console.log("Livro nao encontrado.");
+    listarAcervo(){
+        if(this.acervo == []){
+            console.log("Acervo vazio.")
         }else{
-            livro.emprestado = true;
-            livro.usuarioEmprestismo = usuario;
-            console.log("Livro emprestado com sucesso.")
+            this.acervo.forEach(item => {
+                console.log(item)
+            })
         }
     }
 
-    devolver(codigo){
-        const livro = this.acervo.find(livro => livro.codigo === codigo);
-        if(!livro){
-            console.log("Livro nao encontrado.")
+    adicionarUsuario(usuario){
+        this.usuarios.push(usuario);
+        console.log("Usuario adicionado com sucesso.")
+    }
+
+    emprestarItem(codigo, registroAcademico){
+        const item = this.acervo.find(item => item.codigo === codigo);
+        const user = this.usuarios.find(user => user.registroAcademico === registroAcademico);
+
+        if(item){
+            if(user){
+                item.emprestar(usuario);
+                console.log("Emprestado com sucesso.");
+            }else{
+                console.log("Usuario nao encontrado.");
+            }
         }else{
-            livro.emprestado = false;
-            livro.usuarioEmprestismo = null;
-            console.log("Livro devolvido com sucesso.")
+            console.log("Entidade Bibliografica nao encontrada.");
+        }
+    }
+
+    devolverItem(codigo){
+        const item = this.acervo.find(item => item.codigo === codigo)
+        if(item){
+            item.isEmprestado = false;
+            item.usuarioEmprestimo = null;
+            console.log("Devolvido com sucesso")
+        }else{
+            console.log("Item ja disponivel")
         }
     }
 }
 
-class Usuario{
-    constructor(nome, registroAcademico, dataNascimento){
-        this.nome = nome;
-        this.registroAcademico = registroAcademico;
-        this.dataNascimento = dataNascimento;
-    }
-}
-
-const generoLivro ={
-    acao : "Acao",
-    suspense : "Suspense",
-    comedia : "Comedia"
-}
-
-class Livro extends EntidadeBibliografica {
-    constructor(titulo, autor, anoPublicacao, codigo, genero) {
-        super()
+class EntidadeBibliografica{
+    constructor(codigo, titulo, autor, anoPublicacao){
+        this.codigo = codigo;
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
-        this.codigo = codigo;
+        this.isEmprestado = false;
+        this.usuarioEmprestimo = null;
+    }
+
+    emprestar(usuario){
+        if(this.isEmprestado == false){
+            this.isEmprestado = true;
+            this.usuarioEmprestimo = usuario;
+        }else{
+            console.log("Entidade Bibliografica ja emprestada.")
+        }
+    }
+
+    devolver(){
+        if(this.isEmprestado == false){
+            console.log("Entidade Bibliografica ja devolvida.")
+        }else{
+            this.isEmprestado == false;
+            this.usuarioEmprestimo == null;
+        }
+    }
+}
+
+class Livro extends EntidadeBibliografica{
+    constructor(codigo, titulo, autor, anoPublicacao, genero){
+        super(codigo, titulo, autor, anoPublicacao);
         this.genero = genero;
     }
-    getGenero(){
-        console.log(`Titulo do livro: ${this.titulo}`);
-        console.log(`Autor: ${this.autor}`);
-        console.log(`Ano de publicação: ${this.anoPublicacao}`);
-        console.log(`Código: ${this.codigo}`);
-        console.log(`Gênero: ${this.genero}`);
+
+    informacoes(){
+        console.log(`Codigo:${this.codigo}, Titulo:${this.titulo}, Autor:${this.autor}, Ano de Publicacao:${this.anoPublicacao}, Genero:${this.genero}`);
     }
 }
 
-class Revista extends EntidadeBibliografica {
-    constructor(titulo, autor, anoPublicacao, codigo) {
-        super();
-        this.titulo = titulo;
-        this.autor = autor;
-        this.anoPublicacao = anoPublicacao;
-        this.codigo = codigo;
+class Revista extends EntidadeBibliografica{
+    constructor(codigo, titulo, autor, anoPublicacao, edicao){
+        super(codigo, titulo, autor, anoPublicacao, isEmprestado, usuarioEmprestimo);
+        this.edicao = edicao;
     }
-    getGenero(){
-        console.log(`Titulo da revista: ${this.titulo}`);
-        console.log(`Autor: ${this.autor}`);
-        console.log(`Ano de publicação: ${this.anoPublicacao}`);
-        console.log(`Código: ${this.codigo}`);
+
+    informacoes(){
+        console.log(`Codigo:${this.codigo}, Titulo:${this.titulo}, Autor:${this.autor}, Ano de Publicacao:${this.anoPublicacao}, Edicao:${this.edicao}`);
     }
 }
 
-const livro1 = new Livro("O Senhor dos Anéis", "J. R. R. Tolkien", 1954, 123, generoLivro.acao);
-const usuario1 = new Usuario("João", 123456, "01/01/2000");
-const entidad1 = new EntidadeBibliografica();
 
+const biblio = new Biblioteca();
+const livro1 = new Livro(1305,"señor de los anillos", "yo", 1980, generoLivro.COMEDIA);
+const user1 = new Usuario("tobias",505362,"05/11/2023");

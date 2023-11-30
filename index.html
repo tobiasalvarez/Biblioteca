@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Biblioteca</h1>
+
+    <button id="popular" onclick="popularAcervo()">Popular Acervo</button>
+    <button id="adicionarItem" onclick="">Adicionar Item</button>
+    <button id="listar" onclick="">Listar Acervo</button>
+    <button id="adicionarUser" onclick="">Adicionar Usuario</button>
+    <button id="emprestar" onclick="">Emprestar Item</button>
+    <button id="devolver" onclick="">Devolver Item</button>
+
+
+
+
+
+
+    <script src="/index.html"></script>
+    <script>
+        const biblio = new Biblioteca();
+        async function popularAcervo(){
+            try{
+                const resp = await fetch('https://api-biblioteca-mb6w.onrender.com/users');
+                const respUtil = await resp.json();
+
+            }catch(err){
+                console.log("Erro ao acesar na API");
+            }
+
+        }
+    </script>
+</body>
+</html>
