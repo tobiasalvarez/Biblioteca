@@ -1,38 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Biblioteca</title>
 </head>
+
 <body>
     <h1>Biblioteca</h1>
 
-    <button id="popular" onclick="popularAcervo()">Popular Acervo</button>
-    <button id="adicionarItem" onclick="">Adicionar Item</button>
-    <button id="listar" onclick="">Listar Acervo</button>
-    <button id="adicionarUser" onclick="">Adicionar Usuario</button>
-    <button id="emprestar" onclick="">Emprestar Item</button>
-    <button id="devolver" onclick="">Devolver Item</button>
+    <button id="popular" onclick="inicializarAcervoBiblioteca()">Popular Acervo</button>
+    <button id="adicionarLivro" onclick="adicionarLivro()">Adicionar Livro</button>
+    <button id="adicionarRevista" onclick="adicionarRevista()">Adicionar Revista</button>
+    <button id="listar" onclick="biblio.listarAcervo()">Listar Acervo</button>
+    <button id="adicionarUser" onclick="adicionarUser()">Adicionar Usuario</button>
+    <button id="emprestar" onclick="emprestar()">Emprestar Item</button>
+    <button id="devolver" onclick="devolver()">Devolver Item</button>
 
 
 
 
 
 
-    <script src="/index.html"></script>
+    <script src="/exbiblio.js"></script>
     <script>
         const biblio = new Biblioteca();
-        async function popularAcervo(){
-            try{
-                const resp = await fetch('https://api-biblioteca-mb6w.onrender.com/users');
+        async function obterDadosAPI() {
+            try {
+                const resp = await fetch('https://api-biblioteca-mb6w.onrender.com/acervo');
                 const respUtil = await resp.json();
-
-            }catch(err){
+                return respUtil;
+            } catch (err) {
                 console.log("Erro ao acesar na API");
             }
 
         }
+        async function inicializarAcervoBiblioteca() {
+            const dadosUteisAPI = await obterDadosAPI();
+            await biblio.popularAcervo(dadosUteisAPI);
+            console.log("Acervo do API carregado com sucesso.")
+        }
+
+        function adicionarLivro() {
+            const titulo = prompt("Digite o titulo do livro:");
+            const codigo = prompt("Digite o codigo do livro:");
+            const autor = prompt("Digite o autor do livro:");
+            const anoPublicacao = prompt("Digite o ano de publicacao do livro:");
+            const genero = prompt("Digite o genero do livro:");
+
+            const livroNovo = new Livro(codigo, titulo, autor, anoPublicacao, genero);
+            biblio.adicionarItem(livroNovo);
+        }
+
+        function adicionarRevista() {
+            const titulo = prompt("Digite o titulo da revista:");
+            const codigo = prompt("Digite o codigo da revista:");
+            const autor = prompt("Digite o autor da revista:");
+            const anoPublicacao = prompt("Digite o ano de publicacao da revista:");
+            const edicao = prompt("Digite o edicao da revista:");
+
+            const revistaNova = new Revista(codigo, titulo, autor, anoPublicacao, edicao);
+            biblio.adicionarItem(revistaNova);
+        }
+
+
+
+        function adicionarUser() {
+            const nome = prompt("Digite o nome do usuario:");
+            const registroAcademico = prompt("Digite o registro academico do usuario:");
+            const data = prompt("Digite a data de nascimeto do usuario(dd/mm/aaaa):");
+
+            const newUser = new Usuario(nome, registroAcademico, data);
+            biblio.adicionarUsuario(newUser);
+        }
+
+        function emprestar() {
+            const codigo = prompt("Digite o codigo da entidade bibliografica:");
+            const RA = prompt("Digite o registro academico do aluno:");
+            biblio.emprestarItem(codigo, RA);
+        }
+
+        function devolver() {
+            const codigo = prompt("Digite o codigo da entidade bibliografica a ser devolvida:");
+
+            biblio.devolverItem(codigo);
+        }
     </script>
 </body>
+
 </html>
