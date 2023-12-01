@@ -1,12 +1,12 @@
-const generoLivro = {
-    FICCAO_CIENTIFICA: "Ficcao_cientifica.",
-    TERROR: "Terror.",
-    COMEDIA: "Comedia.",
-    SUSPENSE: "Suspense.",
-    DRAMA: "Drama.",
-    HISTORIA: "Historia.",
-    POLICIAL: "Policial."
-}
+/*const generoLivro = {
+    Ficcao_cientifica: "Ficcao_cientifica.",
+    Terror:"Terror",
+    Comedia: "Comedia",
+    Suspense: "Suspense",
+    Drama:"Drama",
+    Historia: "Historia",
+    Policial: "Policial"
+}*/
 
 class Usuario {
     constructor(nome, registroAcademico, DataNascimento) {
@@ -25,24 +25,25 @@ class Biblioteca {
     popularAcervo(acervo) {
         acervo.forEach(item => {
             if (item.EntidadeBibliografica === "Livro") {
-                this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.genero, item.isEmprestado, item.usuarioEmprestimo));
-            } else {
-                this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.edicao, item.isEmprestado, item.usuarioEmprestimo));
+                this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.genero));
+            } else if(item.EntidadeBibliografica === "Revista") {
+                this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao));
             }
         });
+        this.acervo = acervo;
     }
-
+    
     adicionarItem(item) {
         this.acervo.push(item);
         console.log("Item adicionado com succeso.");
     }
 
     listarAcervo() {
-        if (this.acervo == []) {
+        if (this.acervo.length === 0) {
             console.log("Acervo vazio.")
         } else {
             this.acervo.forEach(item => {
-                if (item.genero === "edicao") {
+                if (item instanceof Livro) {
                     console.log(`Titulo:${item.titulo}`);
                     console.log(`Edicao: ${item.edicao}`);
                     console.log(`Ano de publicacao:${item.anoPublicacao}`);
