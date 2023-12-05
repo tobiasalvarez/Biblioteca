@@ -45,13 +45,13 @@ class Biblioteca {
             this.acervo.forEach(item => {
                 if (item instanceof Livro) {
                     console.log(`Titulo:${item.titulo}`);
-                    console.log(`Edicao: ${item.edicao}`);
+                    console.log(`Genero: ${item.genero}`);
                     console.log(`Ano de publicacao:${item.anoPublicacao}`);
                     console.log(`Autor:${item.autor}`);
                     console.log(`Codigo:${item.codigo}`);
                 } else {
                     console.log(`Titulo:${item.titulo}`);
-                    console.log(`Genero: ${item.genero}`);
+                    console.log(`Edicao: ${item.edicao}`);
                     console.log(`Ano de publicacao:${item.anoPublicacao}`);
                     console.log(`Autor:${item.autor}`);
                     console.log(`Codigo:${item.codigo}`);
