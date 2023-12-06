@@ -27,7 +27,7 @@ class Biblioteca {
             if (item.EntidadeBibliografica === "Livro") {
                 this.acervo.push(new Livro(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.genero));
             } else if(item.EntidadeBibliografica === "Revista") {
-                this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao));
+                this.acervo.push(new Revista(item.codigo, item.titulo, item.autor, item.anoPublicacao, item.edicao));
             }
         });
         this.acervo = acervo;
